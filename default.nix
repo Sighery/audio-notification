@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, bash, coreutils, gawk, wireplumber }:
+{ lib, stdenv, fetchFromGitHub, bash, coreutils, gawk, wireplumber, bc, makeWrapper }:
 
 
 stdenv.mkDerivation rec {
@@ -8,11 +8,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Sighery";
     repo = "audio-notification";
-    rev = "36c76937673a9c05782e21c428bf2ca1ca0e0d78";
-    sha256 = "PcNzAg3bLe5ysWFAvFK1IDVggtGMDl7FfspK4UV89Ms=";
+    rev = "b4f63372d3d5cf0140ea9ae4be07a4435e1349bb";
+    sha256 = "OjujJMhrqFugeGQg+jJbjIGCspDfpE7YJNpkwaAMXa0=";
   };
 
-  buildInputs = [ coreutils bash gawk wireplumber ];
+  buildInputs = [ coreutils bash ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontBuild = true;
 
@@ -20,6 +21,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -a audio_notification.sh $out/bin/audio-notification
     chmod +x $out/bin/audio-notification
+    wrapProgram $out/bin/audio-notification \
+      --prefix PATH : ${ lib.makeBinPath [ bash wireplumber bc gawk ] }
   '';
 
   meta = with lib; {
