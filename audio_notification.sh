@@ -12,7 +12,7 @@ is_muted=$(echo $status | cut -d ' ' -f3)
 summary="Volume $volume%"
 hints=('string:synchronous:volume', "int:value:$volume", 'int:transient:1')
 
-if [ $is_muted == '[MUTED]' ]; then
+if [ "$is_muted" == '[MUTED]' ]; then
 	hints+=('string:hlcolor:#FFFF00')
 	summary+=" $is_muted"
 fi
